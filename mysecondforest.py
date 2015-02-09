@@ -36,7 +36,7 @@ def handlerData(filepath):
     ids = new_pd['PassengerId'].values
 
     # Remove the Name column, Cabin, Ticket, and Sex (since I copied and filled it to Gender)
-    new_pd = new_pd.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'PassengerId', 'Parch'], axis=1)
+    new_pd = new_pd.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'PassengerId', 'Parch', 'Pclass', 'SibSp', 'Fare'], axis=1)
 
     return ids, new_pd
 
