@@ -13,32 +13,32 @@ def handlerData(filepath):
     # Note this is not ideal: in translating categories to numbers, Port "2" is not 2 times greater than Port "1", etc.
 
     # All missing Embarked -> just make them embark from most common place
-    if len(new_pd.Embarked[ new_pd.Embarked.isnull() ]) > 0:
-        new_pd.Embarked[ new_pd.Embarked.isnull() ] = new_pd.Embarked.dropna().mode().values
+    # if len(new_pd.Embarked[ new_pd.Embarked.isnull() ]) > 0:
+    #     new_pd.Embarked[ new_pd.Embarked.isnull() ] = new_pd.Embarked.dropna().mode().values
 
-    Ports = list(enumerate(np.unique(new_pd['Embarked'])))    # determine all values of Embarked,
-    Ports_dict = { name : i for i, name in Ports }              # set up a dictionary in the form  Ports : index
-    new_pd.Embarked = new_pd.Embarked.map( lambda x: Ports_dict[x]).astype(int)     # Convert all Embark strings to int
+    # Ports = list(enumerate(np.unique(new_pd['Embarked'])))    # determine all values of Embarked,
+    # Ports_dict = { name : i for i, name in Ports }              # set up a dictionary in the form  Ports : index
+    # new_pd.Embarked = new_pd.Embarked.map( lambda x: Ports_dict[x]).astype(int)     # Convert all Embark strings to int
 
     # All the ages with no data -> make the median of all Ages
     median_age = new_pd['Age'].dropna().median()
     if len(new_pd.Age[ new_pd.Age.isnull() ]) > 0:
         new_pd.loc[ (new_pd.Age.isnull()), 'Age'] = median_age
 
-    if len(new_pd.Fare[ new_pd.Fare.isnull() ]) > 0:
-        median_fare = np.zeros(3)
-        for f in range(0,3):                                              # loop 0 to 2
-            median_fare[f] = new_pd[ new_pd.Pclass == f+1 ]['Fare'].dropna().median()
-        for f in range(0,3):                                              # loop 0 to 2
-            new_pd.loc[ (new_pd.Fare.isnull()) & (new_pd.Pclass == f+1 ), 'Fare'] = median_fare[f]
+    # if len(new_pd.Fare[ new_pd.Fare.isnull() ]) > 0:
+    #     median_fare = np.zeros(3)
+    #     for f in range(0,3):                                              # loop 0 to 2
+    #         median_fare[f] = new_pd[ new_pd.Pclass == f+1 ]['Fare'].dropna().median()
+    #     for f in range(0,3):                                              # loop 0 to 2
+    #         new_pd.loc[ (new_pd.Fare.isnull()) & (new_pd.Pclass == f+1 ), 'Fare'] = median_fare[f]
 
     # Collect the test data's PassengerIds before dropping it
     ids = new_pd['PassengerId'].values
 
     # Remove the Name column, Cabin, Ticket, and Sex (since I copied and filled it to Gender)
-    new_pd = new_pd.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'PassengerId'], axis=1)
+    new_pd = new_pd.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'PassengerId', 'Fare', 'Parch', 'Embarked'], axis=1)
 
-    return ids, new_pd.values
+    return ids, new_pd
 
 def predict(train_ids, train_data, test_ids, test_data):
     print 'Training...'
@@ -59,4 +59,8 @@ def predict(train_ids, train_data, test_ids, test_data):
 train_ids, train_data = handlerData('train.csv')
 test_ids, test_data = handlerData('test.csv')
 
-predict(train_ids, train_data, test_ids, test_data)
+for t in [train_data, test_data]:
+    print t.describe()
+    print '---'
+
+predict(train_ids, train_data.values, test_ids, test_data.values)

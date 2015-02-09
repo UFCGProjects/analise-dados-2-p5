@@ -1,0 +1,14 @@
+---
+title: "Problema 5"
+author: "Matheus Sampaio"
+date: "09-02-2015"
+output: html_document
+---
+
+```{r, echo=FALSE, message=FALSE}
+# Load data & libraris
+library(dplyr)
+library(ggplot2)
+
+train_data <- read.csv("~/git/analise-dados-2-p5/train.csv")
+```
