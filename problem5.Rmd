@@ -7,8 +7,53 @@ output: html_document
 
 ```{r, echo=FALSE, message=FALSE}
 # Load data & libraris
+library(plyr)
 library(dplyr)
 library(ggplot2)
 
-train_data <- read.csv("~/git/analise-dados-2-p5/train.csv")
+# Prepara os dados
+data <- read.csv("~/git/analise-dados-2-p5/train.csv")
+fare_data <- select(data, Survived, Fare)
+fare_data.summary <- ddply(fare_data, .(Survived), function(x) summary(x$Fare))
+names(fare_data.summary) <- NULL
+fare_data.summary.death <- unlist(c(fare_data.summary[1,]))
+fare_data.summary.survived <-unlist(c(fare_data.summary[2,]))
+
+embark_data <- select(data, Survived, Embarked)
 ```
+
+```{r, echo=FALSE, message=FALSE}
+#Fake data
+#dat <- data.frame(x = 1:100, y = cumsum(rnorm(100)))
+#Breaks for background rectangles
+rects.death <- data.frame(xstart = c(0,80,20), xend = c(20,100,20), col = letters[1:5])
+
+rects.survived <- data.frame(xstart = c(fare_data.summary.survived[2], fare_data.summary.survived[3], fare_data.summary.survived[5], fare_data.summary.survived[6]),
+                             xend = c(fare_data.summary.survived[3], fare_data.summary.survived[5], fare_data.summary.survived[6], fare_data.summary.survived[7]),
+                             col = c("1Qu", "2Qu", "3Qu", "4Qu"))
+  
+ggplot() + 
+  geom_rect(data = rects.survived, aes(xmin = xstart, xmax = xend, ymin = -Inf, ymax = Inf, fill = col), alpha = 0.4) +
+  geom_point(data = filter(fare_data, Survived == 1), aes(x = Fare, y = Survived), alpha = 0.3, position = position_jitter(width = .5)) +
+  ylab("Survided") +
+  scale_y_continuous(breaks=NULL) +
+  scale_x_continuous(breaks=seq(0, 600, 20))
+```
+
+```{r}
+ggplot() + 
+  geom_boxplot(data = fare_data, aes(factor(Survived), Fare)) +
+  geom_jitter() +
+  scale_y_log10(breaks=c(1:9, seq(10,90,10), seq(100, 1000, 100))) +
+  coord_flip() +
+  
+  xlab("Survived")
+```
+
+```{r}
+ggplot() + 
+  geom_point(data = embark_data, aes(factor(Survived), factor(Embarked)), alpha = 0.6, position = position_jitter(width = .2)) +
+  xlab("Survived")
+```
+
+
