@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 import pandas as pd
 import numpy as np
 import csv as csv
@@ -37,7 +40,7 @@ def handlerData(filepath):
     adf['REPROVADO_FALTA'] = adf['MATRICULA'].map(lambda x: len(df[(df.MATRICULA == x) & (df.SITUACAO == 'Reprovado por Falta')]))
     # Adiciono a coluna REPROVADO_FALTA_P com a proporção de cadeiras reprovadas por falta.
     adf['REPROVADO_FALTA_P'] = adf.REPROVADO_FALTA / adf.TOTAL_CADEIRAS
-    
+
     # Adiciono a coluna TRANCADO com a quantidade de cadeiras que o aluno trancou.
     adf['TRANCADO'] = adf['MATRICULA'].map(lambda x: len(df[(df.MATRICULA == x) & (df.SITUACAO == 'Trancado')]))
     # Adiciono a coluna TRANCADO_P com a proporção de cadeiras que o aluno trancou.
@@ -88,15 +91,15 @@ def analyse():
     print pdf[pdf.DIFF == 1]
 
 # Prepara os dados de treino
-train_mats, train_df = handlerData('./dados/dadosAlunos.csv')
+train_mats, train_df = handlerData('./dados/dadostreino.csv')
 
 # PREDICT
-teste_mats, teste_df = handlerData('./dados/dadosTeste_CC_EM.csv')
+teste_mats, teste_df = handlerData('./dados/dadosteste_CC_EM.csv')
 predict(train_mats, train_df.values, teste_mats, teste_df.values, "matheus_sampaio_CC_EM.csv")
 
-teste_mats, teste_df = handlerData('./dados/dadosTeste_CC.csv')
+teste_mats, teste_df = handlerData('./dados/dadosteste_CC.csv')
 predict(train_mats, train_df.values, teste_mats, teste_df.values, "matheus_sampaio_CC.csv")
 
-teste_mats, teste_df = handlerData('./dados/dadosTeste_EM.csv')
+teste_mats, teste_df = handlerData('./dados/dadosteste_EM.csv')
 predict(train_mats, train_df.values, teste_mats, teste_df.values, "matheus_sampaio_EM.csv")
 # analyse()
