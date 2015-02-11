@@ -1,0 +1,9 @@
+CURSO: código do curso do aluno. '14102100' para Ciência da Computação e '11124100' Engenharia Mecânica.
+COD_EVASAO: '0' se o aluno não evadiu após a conclusão do período e '1' caso contrário.
+CODIGO: codigo da disciplina que o aluno cursou
+PERIODO: semestre em que o aluno cursou a disciplina
+DEPARTAMENTO: departamento que oferece a disciplina
+MEDIA: média final do aluno na disciplina
+SITUACAO: 'Aprovado’, 'Reprovado’, 'Reprovado por Falta' e 'Trancado'
+MATRICULA: matrícula (anonimizada) do aluno
+PERIODO_INGRESSO: período que o aluno ingressou no curso
